@@ -1,0 +1,23 @@
+[Unit]
+Description=LibreNMS Dispatcher Sidecar
+After=librenms.service
+Requires=librenms.service
+
+[Container]
+Image=librenms/librenms:latest
+ContainerName=librenms_dispatcher
+HostName=librenms-dispatcher
+AddCapability=NET_ADMIN
+AddCapability=NET_RAW
+Volume=/home/svc_librenms/app_dispatcher_data:/data
+EnvironmentFile=/home/svc_librenms/librenms.env
+Secret=DB_PASS_SECRET,type=env,target=DB_PASSWORD
+Environment=DISPATCHER_NODE_ID=dispatcher1
+Environment=SIDECAR_DISPATCHER=1
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target default.target

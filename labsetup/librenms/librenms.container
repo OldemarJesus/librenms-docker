@@ -1,0 +1,20 @@
+[Unit]
+Description=LibreNMS
+
+[Container]
+Image=librenms/librenms:latest
+ContainerName=librenms
+HostName=librenms
+AddCapability=NET_ADMIN
+AddCapability=NET_RAW
+PublishPort=8000:8000/tcp
+Volume=/home/svc_librenms/app_dispatcher_data:/data
+EnvironmentFile=/home/svc_librenms/librenms.env
+Secret=DB_PASS_SECRET,type=env,target=DB_PASSWORD
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target default.target

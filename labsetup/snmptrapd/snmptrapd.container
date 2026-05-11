@@ -1,0 +1,24 @@
+[Unit]
+Description=LibreNMS SNMP Trap Daemon Sidecar
+After=librenms.service
+Requires=librenms.service
+
+[Container]
+Image=librenms/librenms:latest
+ContainerName=librenms_snmptrapd
+HostName=librenms-snmptrapd
+AddCapability=NET_ADMIN
+AddCapability=NET_RAW
+PublishPort=162:162/tcp
+PublishPort=162:162/udp
+Volume=/home/svc_librenms/app_snmptrapd_data:/data
+EnvironmentFile=/home/svc_librenms/librenms.env
+Secret=DB_PASS_SECRET,type=env,target=DB_PASSWORD
+Environment=SIDECAR_SNMPTRAPD=1
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target default.target
